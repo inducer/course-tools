@@ -1,0 +1,15 @@
+[project]
+name = "course_tools"
+description = "Ad-hoc tools for UIUC courses"
+version = "0.1.0"
+authors = [
+    { name = "Andreas Kloeckner", email = "inform@tiker.net" }
+]
+dependencies = [
+    "numpy",
+    "pytools",
+    "bs4",
+]
+
+[project.scripts]
+make-grade = "course_tools.cli:main"
