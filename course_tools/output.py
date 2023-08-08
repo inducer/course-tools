@@ -2,6 +2,8 @@ import sys
 
 import numpy as np
 
+from course_tools.data import Database
+
 from .grade_tools import format_frac
 
 
@@ -165,6 +167,15 @@ def print_letter_histogram(database):
     for ltr in database.course_rules["LETTER_GRADES"]:
         count = letter_count.get(ltr, 0)
         print("%-3s : % 4d : %s" % (ltr, count, count*"#"))
+
+
+def print_emails(database: Database, email_suffix="") -> None:
+    students = sorted(
+        database.students.values(),
+        key=lambda student: student.network_id)
+
+    for student in students:
+        print(f"{student.network_id}{email_suffix}")
 
 
 def print_banner_csv(database):
