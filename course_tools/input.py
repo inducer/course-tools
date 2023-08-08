@@ -1,3 +1,5 @@
+from typing import Iterable, cast
+
 from course_tools.data import Database
 
 
@@ -9,7 +11,7 @@ def read_moodle_csv(database: Database, csv_name: str) -> None:
     with open(csv_name, "rt", encoding="utf-8") as csvfile:
         data = [ln for ln in csvfile.readlines() if not ln.startswith("#")]
 
-    data = list(csv.reader(data))
+    data = list(cast(Iterable[str], csv.reader(data)))
 
     col_names = data[0]
 
@@ -56,7 +58,7 @@ def read_relate_csv(database: Database, csv_name: str) -> None:
     with open(csv_name, "rt", encoding="utf-8") as csvfile:
         data = [ln for ln in csvfile.readlines() if not ln.startswith("#")]
 
-    data = list(csv.reader(data))
+    data = list(cast(Iterable[str], csv.reader(data)))
 
     col_names = data[0]
 
