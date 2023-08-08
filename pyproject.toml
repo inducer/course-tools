@@ -8,7 +8,8 @@ authors = [
 dependencies = [
     "numpy",
     "pytools",
-    "bs4",
+    "beautifulsoup4",
+    "lxml",
 ]
 
 [project.scripts]
