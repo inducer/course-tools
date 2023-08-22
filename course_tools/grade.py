@@ -9,6 +9,8 @@ def make_letter_grade(database: Database, student: Student,
     if student.grade is None:
         return None
 
+    assert database.course_rules is not None
+
     letters = database.course_rules["LETTER_GRADES"]
     letter = letters[-1]
 

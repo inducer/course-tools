@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Mapping, Optional
+from typing import Dict, List, Mapping, Optional
 
 
 _no_value = object()
@@ -46,19 +46,15 @@ class Student:
         setattr(self, name, value)
 
 
+@dataclass
 class Database:
     """
     .. attribute:: students
     .. attribute:: course_rules
     """
 
-    def __init__(self, course_rules, students=None):
-        if students is None:
-            self.students = {}
-        else:
-            self.students = students
-
-        self.course_rules = course_rules
+    course_rules: Optional[Dict] = None
+    students: Dict[str, Student] = field(default_factory=dict)
 
     def get_student(self, network_id):
         assert network_id == network_id.lower()

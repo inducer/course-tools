@@ -1,4 +1,5 @@
 import sys
+from typing import cast
 
 import numpy as np
 
@@ -172,7 +173,7 @@ def print_letter_histogram(database):
 def print_emails(database: Database, email_suffix="") -> None:
     students = sorted(
         database.students.values(),
-        key=lambda student: student.network_id)
+        key=lambda student: cast(str, student.network_id))
 
     for student in students:
         print(f"{student.network_id}{email_suffix}")
