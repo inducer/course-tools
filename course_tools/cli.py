@@ -15,6 +15,7 @@ def main():
     parser.add_argument("-w", "--warn-level", type=int, default=4)
     parser.add_argument("--limit-to-section", metavar="SECTION")
     parser.add_argument("--limit-to-scale", metavar="SCALE")
+    parser.add_argument("--limit-to-standing", metavar="STANDING")
     parser.add_argument("--print-scales", action="store_true")
     parser.add_argument("-g", "--print-grade-list", action="store_true")
     parser.add_argument("-s", "--print-student-report", metavar="NETWORK_ID")
@@ -64,6 +65,9 @@ def main():
 
     if args.limit_to_section:
         database = qry.limit_to_section(database, args.limit_to_section)
+
+    if args.limit_to_standing:
+        database = qry.limit_to_standing(database, args.limit_to_standing)
 
     if args.limit_to_scale:
         database = qry.limit_to_scale(database, args.limit_to_scale)

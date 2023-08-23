@@ -27,3 +27,12 @@ def limit_to_has_section(database: Database) -> Database:
         for student in database.students.values()
         if student.section
         })
+
+
+def limit_to_standing(database: Database, standing: str) -> Database:
+    return Database(database.course_rules, {
+        cast(str, student.network_id): student
+        for student in database.students.values()
+        if student.standing is not None
+        and student.standing.startswith(standing)
+        })
