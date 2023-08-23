@@ -106,9 +106,9 @@ def print_grade_list(database):
 
         for student in students:
             print(
-                "%-10s %-1s %-20s %-20s %-10s %-3s %.1f"
+                "%-10s %-6s %-20s %-20s %-10s %-3s %.1f"
                 % (student.network_id,
-                    str(getattr(student, "standing", None))[:1],
+                    str(getattr(student, "standing", None))[:6],
                     student.last_name,
                     student.first_name,
                     str(getattr(student, "university_id", None)),
