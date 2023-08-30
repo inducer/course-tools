@@ -27,6 +27,7 @@ def main():
     parser.add_argument("--print-banner-csv", action="store_true")
     parser.add_argument("--print-relate-csv", action="store_true")
     parser.add_argument("--print-preliminary-relate-csv", action="store_true")
+    parser.add_argument("--print-relate-not-in-roster-query", action="store_true")
     parser.add_argument("--print-warnings", action="store_true")
     parser.add_argument(
         "--remove-students-without-section", action="store_true")
@@ -120,6 +121,9 @@ def main():
 
     if args.print_preliminary_relate_csv:
         out.print_preliminary_relate_csv(database)
+
+    if args.print_relate_not_in_roster_query:
+        out.print_relate_not_in_roster_query(database, args.email_suffix)
 
     if args.print_warnings:
         out.print_warnings(database, args.warn_level)

@@ -221,3 +221,15 @@ def print_preliminary_relate_csv(database):
             student.network_id,
             "%.2f" % (100*student.grade),
             ""])
+
+
+def print_relate_not_in_roster_query(database: Database, email_suffix: str) -> None:
+    students = sorted(
+        database.students.values(),
+        key=lambda student: cast(str, student.network_id))
+
+    pos_query = " or ".join(
+            f"email:{student.network_id}{email_suffix}"
+            for student in students)
+
+    print(f"role:student and status:active and not ({pos_query})")
