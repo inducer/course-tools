@@ -34,6 +34,6 @@ def make_letter_grade(database: Database, student: Student,
 
     override = database.course_rules.get("OVERRIDE_LETTER_GRADE")
     if override is not None:
-        letter = override(student, grade, rounded_grade, letter)
+        letter = override(student, grade, rounded_grade, letter, add_log)
 
     return letter
