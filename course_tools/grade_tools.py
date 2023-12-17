@@ -148,4 +148,25 @@ def format_grade_list(lst: Sequence[Optional[float]]) -> str:
 
 # }}}
 
+
+# {{{ drop_letter_grade
+
+_LETTERS = "ABCDEF"
+_LETTER_DROP_MAPPING = {
+    f"{letter}{suffix}": f"{_LETTERS[i+1]}{suffix}"
+    for i, letter in enumerate(_LETTERS[:-1])
+    for suffix in ["+", "", "-"]
+}
+
+def drop_letter_grade(letter: str) -> str:
+    result = _LETTER_DROP_MAPPING.get(letter)
+    if result:
+        return result
+    elif letter in ["I", "F"]:
+        return letter
+    else:
+        raise ValueError(f"unexpected letter grade: '{letter}")
+
+# }}}
+
 # vim: foldmethod=marker
