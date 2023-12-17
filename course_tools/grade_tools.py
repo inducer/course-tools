@@ -158,6 +158,7 @@ _LETTER_DROP_MAPPING = {
     for suffix in ["+", "", "-"]
 }
 
+
 def drop_letter_grade(letter: str) -> str:
     result = _LETTER_DROP_MAPPING.get(letter)
     if result:
