@@ -70,6 +70,7 @@ def print_student_report(database, search_term):
     print("-"*75)
     print("UIN: %s" % student.university_id)
     print("Section: %s" % student.section)
+    print(f"Credit hours: {student.credit_hours}")
     print("Standing: %s" % student.standing)
     print("Scale: %s" % database.course_rules["GET_SCALE"](student))
     for severity, ln in student.log:
