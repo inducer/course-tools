@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 import sys
-from typing import TYPE_CHECKING, Mapping, cast
+from typing import TYPE_CHECKING, Mapping, TypeVar, cast
 
 import numpy as np
 
@@ -15,6 +15,9 @@ from course_tools.data import Database
 from .grade_tools import format_frac
 
 
+T = TypeVar("T")
+
+
 try:
     from vt100 import c
 except ImportError:
@@ -23,6 +26,11 @@ except ImportError:
 
     from warnings import warn
     warn("vt100 module not found--colored output disabled")
+
+
+def _assert_not_none(val: T | None) -> T:
+    assert val is not None
+    return val
 
 
 def print_scales(database):
@@ -190,7 +198,7 @@ def print_emails(database: Database, email_suffix="") -> None:
 def print_banner_csv(database: Database) -> None:
     students = sorted(
         database.students.values(),
-        key=lambda student: student.network_id)
+        key=lambda student: _assert_not_none(student.network_id))
 
     for student in students:
         if not student.university_id:
@@ -255,7 +263,7 @@ def update_banner_xlsx(database: Database, filename: str) -> None:
 def print_relate_csv(database: Database) -> None:
     students = sorted(
         database.students.values(),
-        key=lambda student: student.network_id)
+        key=lambda student: _assert_not_none(student.network_id))
 
     for student in students:
         if student.rounded_grade is not None:
