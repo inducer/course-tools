@@ -25,6 +25,7 @@ def main():
     parser.add_argument("--print-emails", action="store_true")
     parser.add_argument("--email-suffix", default="@illinois.edu")
     parser.add_argument("--print-banner-csv", action="store_true")
+    parser.add_argument("--update-banner-xlsx", metavar="FILENAME")
     parser.add_argument("--print-relate-csv", action="store_true")
     parser.add_argument("--print-preliminary-relate-csv", action="store_true")
     parser.add_argument("--print-relate-not-in-roster-query", action="store_true")
@@ -115,6 +116,9 @@ def main():
 
     if args.print_banner_csv:
         out.print_banner_csv(database)
+
+    if args.update_banner_xlsx:
+        out.update_banner_xlsx(database, args.update_banner_xlsx)
 
     if args.print_relate_csv:
         out.print_relate_csv(database)

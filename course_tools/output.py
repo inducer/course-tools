@@ -1,7 +1,14 @@
+from __future__ import annotations
+
+import os
 import sys
-from typing import cast
+from typing import TYPE_CHECKING, Mapping, cast
 
 import numpy as np
+
+
+if TYPE_CHECKING:
+    from openpyxl import Worksheet
 
 from course_tools.data import Database
 
@@ -180,7 +187,7 @@ def print_emails(database: Database, email_suffix="") -> None:
         print(f"{student.network_id}{email_suffix}")
 
 
-def print_banner_csv(database):
+def print_banner_csv(database: Database) -> None:
     students = sorted(
         database.students.values(),
         key=lambda student: student.network_id)
@@ -197,7 +204,55 @@ def print_banner_csv(database):
                 student.network_id))
 
 
-def print_relate_csv(database):
+def _get_ws_column_headers(ws: Worksheet) -> Mapping[str, int]:
+    result = {}
+    i = 1
+    while h := ws.cell(row=1, column=i).value:
+        result[h] = i
+        i += 1
+
+    return result
+
+
+def update_banner_xlsx(database: Database, filename: str) -> None:
+    from openpyxl import load_workbook
+    wb = load_workbook(filename)
+    ws = wb.active
+
+    headers = _get_ws_column_headers(ws)
+    student_id_col = headers["Student ID"]
+    grade_col = headers["Final Grade"]
+
+    sid_to_row = {}
+    i = 2
+    while sid := ws.cell(row=i, column=student_id_col).value:
+        sid_to_row[sid] = i
+        i += 1
+
+    for student in database.students.values():
+        if not student.university_id:
+            print(
+                f"*** {student.network_id} "
+                f"(Section {getattr(student, 'section', None)}) "
+                "does not have a university_id",
+                file=sys.stderr)
+        elif student.university_id not in sid_to_row:
+            print(
+                f"*** {student.network_id} "
+                f"(Section {getattr(student, 'section', None)}) "
+                "is not in template XLS",
+                file=sys.stderr)
+        else:
+            ws.cell(
+                    row=sid_to_row[student.university_id],
+                    column=grade_col,
+                    value=student.letter_grade)
+
+    nm, ext = os.path.splitext(filename)
+    wb.save(f"{nm}-updated{ext}")
+
+
+def print_relate_csv(database: Database) -> None:
     students = sorted(
         database.students.values(),
         key=lambda student: student.network_id)

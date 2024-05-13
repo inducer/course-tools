@@ -10,6 +10,7 @@ dependencies = [
     "pytools",
     "beautifulsoup4",
     "lxml",
+    "openpyxl",
 ]
 
 [project.scripts]
