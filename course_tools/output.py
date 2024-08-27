@@ -45,9 +45,9 @@ def print_scales(database):
 
 def print_warnings(database, warn_level):
     for student in database.students.values():
-        for severity, l in student.log:
+        for severity, ln in student.log:
             if severity >= warn_level:
-                print("*** %s: %s" % (student.network_id, l), file=sys.stderr)
+                print("*** %s: %s" % (student.network_id, ln), file=sys.stderr)
 
 
 def find_student(database, search_term):
