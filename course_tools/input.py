@@ -101,6 +101,11 @@ def read_my_engr_html_roster(database: Database, html_name: str) -> None:
         if "id" in child.attrs and child["id"].startswith("rostertable"):
             rostertable_div = child
             section_head = rostertable_div.find("h5").string.split()[1]
+            rostertable = rostertable_div.find("table")
+            if rostertable is None:
+                # empty section
+                continue
+
             rosterhead = rostertable_div.find("table").find("thead")
             rosterbody = rostertable_div.find("table").find("tbody")
 
