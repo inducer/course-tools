@@ -195,6 +195,18 @@ def print_emails(database: Database, email_suffix="") -> None:
         print(f"{student.network_id}{email_suffix}")
 
 
+def print_roster_csv(database: Database) -> None:
+    students = sorted(
+        database.students.values(),
+        key=lambda student: cast(str, student.network_id))
+
+    import csv
+    writer = csv.writer(sys.stdout)
+    writer.writerow(["NetID", "First Name", "Last Name"])
+    for student in students:
+        writer.writerow([student.network_id, student.first_name, student.last_name])
+
+
 def print_banner_csv(database: Database) -> None:
     students = sorted(
         database.students.values(),

@@ -23,6 +23,7 @@ def main():
     parser.add_argument("--plot-histogram", action="store_true")
     parser.add_argument("--histogram-undiff", action="store_true")
     parser.add_argument("--print-emails", action="store_true")
+    parser.add_argument("--print-roster-csv", action="store_true")
     parser.add_argument("--email-suffix", default="@illinois.edu")
     parser.add_argument("--print-banner-csv", action="store_true")
     parser.add_argument("--update-banner-xlsx", metavar="FILENAME")
@@ -113,6 +114,9 @@ def main():
 
     if args.print_emails:
         out.print_emails(database, args.email_suffix)
+
+    if args.print_roster_csv:
+        out.print_roster_csv(database)
 
     if args.print_banner_csv:
         out.print_banner_csv(database)
