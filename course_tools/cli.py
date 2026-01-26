@@ -35,6 +35,8 @@ def main():
     parser.add_argument("--print-preliminary-relate-csv", action="store_true")
     parser.add_argument("--print-relate-not-in-roster-query", action="store_true")
     parser.add_argument("--print-warnings", action="store_true")
+    parser.add_argument("--print-random-group-csv", action="store_true")
+    parser.add_argument("--random-group-size", type=int, default=6)
     parser.add_argument(
         "--remove-students-without-section", action="store_true")
     args = parser.parse_args()
@@ -135,6 +137,9 @@ def main():
 
     if args.print_relate_not_in_roster_query:
         out.print_relate_not_in_roster_query(database, args.email_suffix)
+
+    if args.print_random_group_csv:
+        out.print_random_group_csv(database, args.random_group_size)
 
     if args.print_warnings:
         out.print_warnings(database, args.warn_level)
