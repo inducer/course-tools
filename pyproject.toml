@@ -1,3 +1,7 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [project]
 name = "course_tools"
 description = "Ad-hoc tools for UIUC courses"
