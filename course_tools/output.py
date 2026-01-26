@@ -2,15 +2,18 @@ from __future__ import annotations
 
 import os
 import sys
-from typing import TYPE_CHECKING, Mapping, TypeVar, cast
+from typing import TYPE_CHECKING, TypeVar, cast
 
 import numpy as np
 
 
 if TYPE_CHECKING:
+    from collections.abc import Mapping
+
     from openpyxl import Worksheet
 
-from course_tools.data import Database
+    from course_tools.data import Database
+
 
 from .grade_tools import format_frac
 
@@ -25,7 +28,7 @@ except ImportError:
         return ""
 
     from warnings import warn
-    warn("vt100 module not found--colored output disabled")
+    warn("vt100 module not found--colored output disabled", stacklevel=2)
 
 
 def _assert_not_none(val: T | None) -> T:
@@ -39,7 +42,7 @@ def print_scales(database):
         print("-"*75)
         print("SCALE: %s" % name)
         print("-"*75)
-        for grade, points in zip(rules["LETTER_GRADES"], values):
+        for grade, points in zip(rules["LETTER_GRADES"], values, strict=False):
             print("%s\t >= %s" % (grade, points))
 
 
@@ -165,7 +168,7 @@ def plot_histogram(database, differentiated):
         dataset_names = ["Everybody"]
 
     import matplotlib.pyplot as pt
-    for name, ds in zip(dataset_names, datasets):
+    for name, ds in zip(dataset_names, datasets, strict=False):
         print("%s: mean: %.2f - stddev: %.2f (n=%d)" % (
             name, np.average(ds), np.std(ds), len(ds)))
 
@@ -189,7 +192,7 @@ def print_letter_histogram(database):
 def print_emails(database: Database, email_suffix="") -> None:
     students = sorted(
         database.students.values(),
-        key=lambda student: cast(str, student.network_id))
+        key=lambda student: cast("str", student.network_id))
 
     for student in students:
         print(f"{student.network_id}{email_suffix}")
@@ -198,7 +201,7 @@ def print_emails(database: Database, email_suffix="") -> None:
 def print_roster_csv(database: Database) -> None:
     students = sorted(
         database.students.values(),
-        key=lambda student: cast(str, student.network_id))
+        key=lambda student: cast("str", student.network_id))
 
     import csv
     writer = csv.writer(sys.stdout)
@@ -302,7 +305,7 @@ def print_preliminary_relate_csv(database):
 def print_relate_not_in_roster_query(database: Database, email_suffix: str) -> None:
     students = sorted(
         database.students.values(),
-        key=lambda student: cast(str, student.network_id))
+        key=lambda student: cast("str", student.network_id))
 
     pos_query = " or ".join(
             f"email:{student.network_id}{email_suffix}"

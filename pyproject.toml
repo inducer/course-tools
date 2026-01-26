@@ -15,3 +15,63 @@ dependencies = [
 
 [project.scripts]
 coursetool = "course_tools.cli:main"
+
+[tool.ruff]
+preview = true
+
+[tool.ruff.lint]
+extend-select = [
+    "B",   # flake8-bugbear
+    "C",   # flake8-comprehensions
+    "E",   # pycodestyle
+    "F",   # pyflakes
+    "G",   # flake8-logging-format
+    "I",   # flake8-isort
+    "N",   # pep8-naming
+    "NPY", # numpy
+    "PGH", # pygrep-hooks
+    "Q",   # flake8-quotes
+    "RUF", # ruff
+    "SIM", # flake8-simplify
+    "TC",  # flake8-type-checking
+    "UP",  # pyupgrade
+    "W",   # pycodestyle
+    "FURB",
+]
+extend-ignore = [
+    "C90",  # McCabe complexity
+    "E221", # multiple spaces before operator
+    "E226", # missing whitespace around arithmetic operator
+    "E402", # module-level import not at top of file
+    "UP031", # use f-strings instead of %
+    "UP032", # use f-strings instead of .format
+
+    # FIXME: This is a longer discussion...
+    "RUF067", # __init__ should only contain reexports
+]
+
+[tool.ruff.lint.flake8-quotes]
+docstring-quotes = "double"
+inline-quotes = "double"
+multiline-quotes = "double"
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+known-local-folder = [
+    "pytools",
+]
+lines-after-imports = 2
+required-imports = ["from __future__ import annotations"]
+
+[tool.ruff.lint.pep8-naming]
+extend-ignore-names = ["update_for_*"]
+
+
+[tool.basedpyright]
+reportImplicitStringConcatenation = "none"
+reportUnnecessaryIsInstance = "none"
+reportUnusedCallResult = "none"
+reportExplicitAny = "none"
+reportUnreachable = "hint"
+
+

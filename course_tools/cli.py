@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+import pathlib
+
 from . import input as inp, output as out, query as qry
 from .data import Database
 from .grade import make_letter_grade
@@ -39,8 +43,7 @@ def main():
         raise RuntimeError("course rules module needed")
 
     course_rules = {}
-    with open(args.course_rules) as rulesf:
-        rules_file_contents = rulesf.read()
+    rules_file_contents = pathlib.Path(args.course_rules).read_text()
 
     exec(compile(rules_file_contents, args.course_rules, "exec"), course_rules)
 

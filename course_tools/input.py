@@ -1,6 +1,13 @@
-from typing import Iterable, cast
+from __future__ import annotations
 
-from course_tools.data import Database
+from pathlib import Path
+from typing import TYPE_CHECKING, cast
+
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
+
+    from course_tools.data import Database
 
 
 # {{{ moodle
@@ -8,10 +15,10 @@ from course_tools.data import Database
 def read_moodle_csv(database: Database, csv_name: str) -> None:
     import csv
 
-    with open(csv_name, "rt", encoding="utf-8") as csvfile:
-        data = [ln for ln in csvfile.readlines() if not ln.startswith("#")]
+    with open(csv_name, encoding="utf-8") as csvfile:
+        data = [ln for ln in csvfile if not ln.startswith("#")]
 
-    data = list(cast(Iterable[str], csv.reader(data)))
+    data = list(cast("Iterable[str]", csv.reader(data)))
 
     col_names = data[0]
 
@@ -39,7 +46,7 @@ def read_moodle_csv(database: Database, csv_name: str) -> None:
     for row in data[1:]:
         row_dict = {
             proc_colname(colname): proc_value(value)
-            for colname, value in zip(col_names, row)}
+            for colname, value in zip(col_names, row, strict=False)}
         netid = row_dict["Username"]
         student = database.get_student(netid)
         student.set_attribute("network_id", netid)
@@ -55,10 +62,10 @@ def read_moodle_csv(database: Database, csv_name: str) -> None:
 def read_relate_csv(database: Database, csv_name: str) -> None:
     import csv
 
-    with open(csv_name, "rt", encoding="utf-8") as csvfile:
-        data = [ln for ln in csvfile.readlines() if not ln.startswith("#")]
+    with open(csv_name, encoding="utf-8") as csvfile:
+        data = [ln for ln in csvfile if not ln.startswith("#")]
 
-    data = list(cast(Iterable[str], csv.reader(data)))
+    data = list(cast("Iterable[str]", csv.reader(data)))
 
     col_names = data[0]
 
@@ -76,7 +83,7 @@ def read_relate_csv(database: Database, csv_name: str) -> None:
 
     for row in data[1:]:
         row_dict = {colname: proc_value(value)
-            for colname, value in zip(col_names, row)}
+            for colname, value in zip(col_names, row, strict=False)}
         email = row_dict["user_name"]
         netid = email[:email.find("@")].lower()
         student = database.get_student(netid)
@@ -92,9 +99,9 @@ def read_relate_csv(database: Database, csv_name: str) -> None:
 
 def read_my_engr_html_roster(database: Database, html_name: str) -> None:
     from bs4 import BeautifulSoup
-    with open(
-            html_name, "rt", encoding="utf-8", errors="replace") as html_file:
-        soup = BeautifulSoup(html_file.read(), "lxml")
+    soup = BeautifulSoup(
+                Path(html_name).read_text(encoding="utf-8", errors="replace"),
+                "lxml")
 
     for child in soup.find(
             "div", attrs={"class": "module_content"}).find_all("div"):
@@ -112,7 +119,7 @@ def read_my_engr_html_roster(database: Database, html_name: str) -> None:
             columns = [span.string for span in rosterhead.find_all("span")]
             for tr in rosterbody.find_all("tr"):
                 row = dict(zip(columns, [
-                    td.get_text().strip() for td in tr.find_all("td")]))
+                    td.get_text().strip() for td in tr.find_all("td")], strict=False))
 
                 netid = row["Net ID"]
                 student = database.get_student(netid)
@@ -126,7 +133,8 @@ def read_my_engr_html_roster(database: Database, html_name: str) -> None:
                     from warnings import warn
                     warn(
                         f"student {netid} in section {section_tbl} found under "
-                        f"section heading {section_head}, ignoring heading")
+                        f"section heading {section_head}, ignoring heading",
+                        stacklevel=2)
 
                 student.set_attribute("standing", row["Year"])
                 student.set_attribute("section", section_tbl)
