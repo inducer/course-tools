@@ -1,4 +1,10 @@
-from typing import Optional, Sequence, Tuple
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 
 # {{{ argmin, argmax
@@ -8,7 +14,7 @@ def argmin2(iterable, return_value=False):
     try:
         current_argmin, current_min = next(it)
     except StopIteration:
-        raise ValueError("argmin of empty iterable")
+        raise ValueError("argmin of empty iterable") from None
 
     for arg, item in it:
         if item < current_min:
@@ -46,19 +52,19 @@ def count_none(values: Sequence[float]) -> int:
     return result
 
 
-def drop_nones(values: Sequence[Optional[float]]) -> Sequence[float]:
+def drop_nones(values: Sequence[float | None]) -> Sequence[float]:
     return [i for i in values if i is not None]
 
 
-def zero_none(v: Optional[float]) -> float:
+def zero_none(v: float | None) -> float:
     return 0 if v is None else v
 
 
-def zero_nones(values: Sequence[Optional[float]]) -> Sequence[float]:
+def zero_nones(values: Sequence[float | None]) -> Sequence[float]:
     return [0 if v is None else v for v in values]
 
 
-def div_or_none(a: Optional[float], b: float) -> Optional[float]:
+def div_or_none(a: float | None, b: float) -> float | None:
     if a is None:
         return None
     else:
@@ -66,9 +72,9 @@ def div_or_none(a: Optional[float], b: float) -> Optional[float]:
 
 
 def weighted_avg(
-        seq: Sequence[Optional[float]], weights: Sequence[float],
+        seq: Sequence[float | None], weights: Sequence[float],
         *,
-        extra_seq: Sequence[Optional[float]] = (),
+        extra_seq: Sequence[float | None] = (),
         extra_weights: Sequence[float] = ()
         ) -> float:
     assert len(seq) == len(weights)
@@ -78,14 +84,14 @@ def weighted_avg(
             sum(zero_none(l_i)*w
                 for w, l_i in zip(
                     list(weights) + list(extra_weights),
-                    list(seq) + list(extra_seq)))
+                    list(seq) + list(extra_seq), strict=False))
             / sum(weights))
 
 
 def drop_weighted(
         seq: Sequence[float],
         weights: Sequence[float],
-        drop_weight: float) -> Tuple[Sequence[float], Sequence[float]]:
+        drop_weight: float) -> tuple[Sequence[float], Sequence[float]]:
     assert len(seq) == len(weights)
 
     mseq = list(seq)
@@ -125,25 +131,25 @@ def test_drop_weighted():
 
 # {{{ formatting
 
-def format_grade(v: Optional[float]) -> str:
+def format_grade(v: float | None) -> str:
     if v is None:
         return "NONE"
     else:
         return "%.1f" % (v)
 
 
-def format_frac(v: Optional[float]) -> str:
+def format_frac(v: float | None) -> str:
     if v is None:
         return "NONE"
     else:
         return "%.1f" % (100*v)
 
 
-def format_frac_list(lst: Sequence[Optional[float]]) -> str:
+def format_frac_list(lst: Sequence[float | None]) -> str:
     return ", ".join(format_frac(f) for f in lst)
 
 
-def format_grade_list(lst: Sequence[Optional[float]]) -> str:
+def format_grade_list(lst: Sequence[float | None]) -> str:
     return ", ".join(format_grade(f) for f in lst)
 
 # }}}

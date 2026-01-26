@@ -1,11 +1,18 @@
-from typing import Callable, Optional
+from __future__ import annotations
 
-from .data import Database, Student
+from typing import TYPE_CHECKING
+
 from .grade_tools import format_frac
 
 
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    from .data import Database, Student
+
+
 def make_letter_grade(database: Database, student: Student,
-                      add_log: Callable[[int | float, str], None]) -> Optional[str]:
+                      add_log: Callable[[int | float, str], None]) -> str | None:
     if student.grade is None:
         return None
 
@@ -23,7 +30,7 @@ def make_letter_grade(database: Database, student: Student,
 
     cutoffs = database.course_rules["SCALE_CUTOFFS"][scale_name]
 
-    for potential_letter, cutoff in zip(letters, cutoffs):
+    for potential_letter, cutoff in zip(letters, cutoffs, strict=False):
         if cutoff > rounded_grade >= cutoff-1:
             add_log(5, "Close call: %s (has: %s -> %s, cutoff: %s)"
                     % (potential_letter, format_frac(student.grade),
