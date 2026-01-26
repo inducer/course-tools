@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 
 if TYPE_CHECKING:
@@ -29,7 +29,7 @@ class Student:
 
     log: list[str] = field(default_factory=list)
 
-    def set_attribute(self, name, value):
+    def set_attribute(self, name: str, value: Any):
         old_value = getattr(self, name, _no_value)
 
         if old_value is not _no_value and old_value:

@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
     from openpyxl import Worksheet
 
-    from course_tools.data import Database
+    from course_tools.data import Database, Student
 
 
 from .grade_tools import format_frac
@@ -36,7 +36,7 @@ def _assert_not_none(val: T | None) -> T:
     return val
 
 
-def print_scales(database):
+def print_scales(database: Database):
     rules = database.course_rules
     for name, values in sorted(rules["SCALE_CUTOFFS"].items()):
         print("-"*75)
@@ -46,20 +46,20 @@ def print_scales(database):
             print("%s\t >= %s" % (grade, points))
 
 
-def print_warnings(database, warn_level):
+def print_warnings(database: Database, warn_level: int):
     for student in database.students.values():
         for severity, ln in student.log:
             if severity >= warn_level:
                 print("*** %s: %s" % (student.network_id, ln), file=sys.stderr)
 
 
-def find_student(database, search_term):
+def find_student(database: Database, search_term: str):
     try:
         return database.students[search_term]
     except KeyError:
         pass
 
-    values = []
+    values: list[Student] = []
     for student in database.students.values():
         if search_term.lower() in (
                 student.network_id
@@ -78,7 +78,7 @@ def find_student(database, search_term):
     return values[0]
 
 
-def print_student_report(database, search_term):
+def print_student_report(database: Database, search_term: str):
     student = find_student(database, search_term)
 
     print("-"*75)
@@ -104,7 +104,7 @@ def print_student_report(database, search_term):
     print("-"*75)
 
 
-def print_grade_list(database):
+def print_grade_list(database: Database):
     sections = {
         str(getattr(student, "section", None))
         for student in database.students.values()}
@@ -135,7 +135,7 @@ def print_grade_list(database):
                     student.rounded_grade))
 
 
-def plot_histogram(database, differentiated):
+def plot_histogram(database: Database, differentiated: bool):
     sections = sorted(
             {str(getattr(student, "section", None))
             for student in database.students.values()})
@@ -288,7 +288,7 @@ def print_relate_csv(database: Database) -> None:
                 student.letter_grade))
 
 
-def print_preliminary_relate_csv(database):
+def print_preliminary_relate_csv(database: Database):
     students = sorted(
         database.students.values(),
         key=lambda student: student.network_id)
