@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import sys
+from random import Random
 from typing import TYPE_CHECKING, TypeVar, cast
 
 import numpy as np
@@ -312,3 +313,20 @@ def print_relate_not_in_roster_query(database: Database, email_suffix: str) -> N
             for student in students)
 
     print(f"role:student and status:active and not ({pos_query})")
+
+
+def print_random_group_csv(database: Database, group_size: int) -> None:
+    ngroups = (len(database.students) + group_size - 1) // group_size
+    groups: list[list[Student]] = [[] for _i in range(ngroups)]
+
+    rng = Random()
+    students = list(database.students.values())
+    igroup = 0
+    while students:
+        istudent = rng.randint(0, len(students)-1)
+        groups[igroup].append(students.pop(istudent))
+        igroup = (igroup + 1) % ngroups
+
+    for igrp, grp_students in enumerate(groups):
+        for s in grp_students:
+            print(f"Room {igrp + 1},{s.network_id}@illinois.edu")
