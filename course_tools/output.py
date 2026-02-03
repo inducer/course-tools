@@ -206,9 +206,10 @@ def print_roster_csv(database: Database) -> None:
 
     import csv
     writer = csv.writer(sys.stdout)
-    writer.writerow(["NetID", "First Name", "Last Name"])
+    writer.writerow(["NetID", "First Name", "Last Name", "UIN", "Section"])
     for student in students:
-        writer.writerow([student.network_id, student.first_name, student.last_name])
+        writer.writerow([student.network_id, student.first_name, student.last_name,
+                        student.university_id, student.section])
 
 
 def print_banner_csv(database: Database) -> None:
