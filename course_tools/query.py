@@ -5,11 +5,11 @@ from typing import cast
 from course_tools.data import Database
 
 
-def limit_to_section(database: Database, section: str) -> Database:
+def limit_to_section(database: Database, sections: list[str]) -> Database:
     return Database(database.course_rules, {
         cast("str", student.network_id): student
         for student in database.students.values()
-        if student.section == section
+        if student.section in sections
         })
 
 

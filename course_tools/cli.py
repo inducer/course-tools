@@ -17,7 +17,7 @@ def main():
     parser.add_argument("--my-cs-html-roster", metavar="HTML", nargs="*")
     parser.add_argument("--course-rules", metavar="RULES_PY")
     parser.add_argument("-w", "--warn-level", type=int, default=4)
-    parser.add_argument("--limit-to-section", metavar="SECTION")
+    parser.add_argument("--limit-to-section", metavar="SECTION", nargs="+")
     parser.add_argument("--limit-to-scale", metavar="SCALE")
     parser.add_argument("--limit-to-standing", metavar="STANDING")
     parser.add_argument("--print-scales", action="store_true")
