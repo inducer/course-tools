@@ -40,7 +40,7 @@ def read_moodle_csv(database: Database, csv_name: str) -> None:
 
         try:
             return float(v)
-        except TypeError:
+        except ValueError:
             return v
 
     for row in data[1:]:
