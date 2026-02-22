@@ -60,13 +60,12 @@ def find_student(database: Database, search_term: str):
     except KeyError:
         pass
 
-    values: list[Student] = []
-    for student in database.students.values():
+    values: list[Student] = [
+        student for student in database.students.values()
         if search_term.lower() in (
                 student.network_id
                 + "|" + getattr(student, "last_name", "")
-                + "|" + getattr(student, "first_name", "")).lower():
-            values.append(student)
+                + "|" + getattr(student, "first_name", "")).lower()]
 
     if not values:
         raise ValueError("no student found for '%s'" % search_term)

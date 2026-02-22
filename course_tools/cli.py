@@ -47,7 +47,7 @@ def main():
     course_rules = {}
     rules_file_contents = pathlib.Path(args.course_rules).read_text()
 
-    exec(compile(rules_file_contents, args.course_rules, "exec"), course_rules)
+    exec(compile(rules_file_contents, args.course_rules, "exec"), course_rules)  # noqa: S102
 
     database = Database(course_rules)
 
