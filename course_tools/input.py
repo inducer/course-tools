@@ -40,7 +40,7 @@ def read_moodle_csv(database: Database, csv_name: str) -> None:
 
         try:
             return float(v)
-        except Exception:
+        except TypeError:
             return v
 
     for row in data[1:]:
@@ -78,7 +78,7 @@ def read_relate_csv(database: Database, csv_name: str) -> None:
 
         try:
             return float(v)
-        except Exception:
+        except ValueError:
             return v
 
     for row in data[1:]:
