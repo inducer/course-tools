@@ -2,44 +2,47 @@ from __future__ import annotations
 
 import pathlib
 
+import typed_argparse as tap
+
 from . import input as inp, output as out, query as qry
 from .data import Database
 from .grade import make_letter_grade
 
 
+class Args(tap.TypedArgs):
+    moodle_csv: list[str] | None = tap.arg(metavar="CSV", nargs="*", default=None)
+    relate_csv: list[str] | None = tap.arg(metavar="CSV", nargs="*", default=None)
+    my_cs_html_roster: list[str] | None = tap.arg(
+        metavar="HTML", nargs="*", default=None)
+    course_rules: str | None = tap.arg(metavar="RULES_PY", default=None)
+    warn_level: int = tap.arg("-w", default=4)
+    limit_to_section: list[str] = tap.arg(metavar="SECTION", nargs="+", default=[])
+    limit_to_scale: str | None = tap.arg(metavar="SCALE", default=None)
+    limit_to_standing: str | None = tap.arg(metavar="STANDING", default=None)
+    print_scales: bool = tap.arg(default=False)
+    print_grade_list: bool = tap.arg("-g", default=False)
+    print_student_report: str | None = tap.arg("-s", metavar="NETWORK_ID", default=None)
+    print_letter_histogram: bool = tap.arg(default=False)
+    plot_histogram: bool = tap.arg(default=False)
+    histogram_undiff: bool = tap.arg(default=False)
+    print_emails: bool = tap.arg(default=False)
+    print_roster_csv: bool = tap.arg(default=False)
+    email_suffix: str = tap.arg(default="@illinois.edu")
+    print_banner_csv: bool = tap.arg(default=False)
+    update_banner_xlsx: str | None = tap.arg(metavar="FILENAME", default=None)
+    print_relate_csv: bool = tap.arg(default=False)
+    print_preliminary_relate_csv: bool = tap.arg(default=False)
+    print_relate_not_in_roster_query: bool = tap.arg(default=False)
+    print_warnings: bool = tap.arg(default=False)
+    print_random_group_csv: bool = tap.arg(default=False)
+    random_group_size: int = tap.arg(default=6)
+    remove_students_without_section: bool = tap.arg(default=False)
+
+
 def main():
     # {{{ frontend
 
-    from argparse import ArgumentParser
-    parser = ArgumentParser(usage="%(prog)s [options]")
-    parser.add_argument("--moodle-csv", metavar="CSV", nargs="*")
-    parser.add_argument("--relate-csv", metavar="CSV", nargs="*")
-    parser.add_argument("--my-cs-html-roster", metavar="HTML", nargs="*")
-    parser.add_argument("--course-rules", metavar="RULES_PY")
-    parser.add_argument("-w", "--warn-level", type=int, default=4)
-    parser.add_argument("--limit-to-section", metavar="SECTION", nargs="+")
-    parser.add_argument("--limit-to-scale", metavar="SCALE")
-    parser.add_argument("--limit-to-standing", metavar="STANDING")
-    parser.add_argument("--print-scales", action="store_true")
-    parser.add_argument("-g", "--print-grade-list", action="store_true")
-    parser.add_argument("-s", "--print-student-report", metavar="NETWORK_ID")
-    parser.add_argument("--print-letter-histogram", action="store_true")
-    parser.add_argument("--plot-histogram", action="store_true")
-    parser.add_argument("--histogram-undiff", action="store_true")
-    parser.add_argument("--print-emails", action="store_true")
-    parser.add_argument("--print-roster-csv", action="store_true")
-    parser.add_argument("--email-suffix", default="@illinois.edu")
-    parser.add_argument("--print-banner-csv", action="store_true")
-    parser.add_argument("--update-banner-xlsx", metavar="FILENAME")
-    parser.add_argument("--print-relate-csv", action="store_true")
-    parser.add_argument("--print-preliminary-relate-csv", action="store_true")
-    parser.add_argument("--print-relate-not-in-roster-query", action="store_true")
-    parser.add_argument("--print-warnings", action="store_true")
-    parser.add_argument("--print-random-group-csv", action="store_true")
-    parser.add_argument("--random-group-size", type=int, default=6)
-    parser.add_argument(
-        "--remove-students-without-section", action="store_true")
-    args = parser.parse_args()
+    args = tap.Parser(Args).parse_args()
 
     if args.course_rules is None:
         raise RuntimeError("course rules module needed")

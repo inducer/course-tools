@@ -15,6 +15,7 @@ dependencies = [
     "beautifulsoup4",
     "lxml",
     "openpyxl",
+    "typed-argparse",
 ]
 
 [project.scripts]
