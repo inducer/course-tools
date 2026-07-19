@@ -48,7 +48,7 @@ def run(args: Args):
     course_rules = {}
     rules_file_contents = pathlib.Path(args.course_rules).read_text()
 
-    exec(compile(rules_file_contents, args.course_rules, "exec"), course_rules)  # noqa: S102
+    exec(compile(rules_file_contents, args.course_rules, "exec"), course_rules)  # ruff:ignore[exec-builtin]
 
     database = Database(course_rules)
 
@@ -88,7 +88,7 @@ def run(args: Args):
 
         def add_log(severity, msg):
             """severity: 0-5"""
-            log.append((severity, msg))  # noqa: B023
+            log.append((severity, msg))  # ruff:ignore[function-uses-loop-variable]
 
         grade = database.course_rules["MAKE_GRADE"](student, add_log)
         student.set_attribute("grade", grade)

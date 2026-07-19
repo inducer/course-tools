@@ -45,14 +45,14 @@ extend-select = [
 ]
 extend-ignore = [
     "C90",  # McCabe complexity
-    "E221", # multiple spaces before operator
-    "E226", # missing whitespace around arithmetic operator
-    "E402", # module-level import not at top of file
-    "UP031", # use f-strings instead of %
-    "UP032", # use f-strings instead of .format
+    "multiple-spaces-before-operator",
+    "missing-whitespace-around-arithmetic-operator",
+    "module-import-not-at-top-of-file",
+    "printf-string-formatting",
+    "f-string",
 
     # FIXME: This is a longer discussion...
-    "RUF067", # __init__ should only contain reexports
+    "non-empty-init-module", # __init__ should only contain reexports
 ]
 
 [tool.ruff.lint.flake8-quotes]
